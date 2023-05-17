@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+body {
+    background: #E6E8FB;
+    margin:0px;
+    padding:0px;
+}
+div {
+    width: 300px;
+    height: 200px;
+    background: #E6E8FB;
+    margin: 0px auto;
+    text-align: center;
+}
+h3 {
+    color: #1937FF;
+    font-size: 20px;
+    font-style: bold;
+    font-family: sans-serif;
+    padding-top: 10px;
+}
+::placeholder {
+    color:  #747AFF;
+    font-family: sans-serif;
+    font-style: bold;
+}
+input {
+    background: #E6E8FB;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: #1937FF;
+    color:  #1937FF;
+    font-family: sans-serif;
+    font-style: bold;
+}
+button {
+    background: #E6E8FB;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: #1937FF;
+    color:  #1937FF;
+    font-family: sans-serif;
+    font-style: bold;
+}
+span {
+    color: #1937FF;
+    font-size: 15px;
+    font-style: bold;
+    font-family: sans-serif;
+    display:block;
+    margin-top: 10px;
+}
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>shorterURL</title>
+</head>
+<body>
+    <div>
+        <h3>shorterURL</h3>
+        <input type="url" placeholder="domain.ru/123" id="urlForm"/>
+        <button onclick="tap()">Generate</button>
+        <div>
+            <span id="out"></span>
+        </div>
+        <script src="/js/main.js"></script>
+    </div>
+</body>
+</html>
