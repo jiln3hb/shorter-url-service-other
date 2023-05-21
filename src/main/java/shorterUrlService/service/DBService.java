@@ -9,12 +9,17 @@ import java.util.List;
 
 @Service
 public class DBService {
+    private final MainRepo mainRepo; //TODO доступ к репозиторию должен иметь только этот сервис
 
-    public List<Urll> listAll(MainRepo mainRepo) { //метод возвращает все данные из бд
+    public DBService(MainRepo mainRepo) {
+        this.mainRepo = mainRepo;
+    }
+
+    public List<Urll> listAll() { //метод возвращает все данные из бд
         return mainRepo.findAll();
     }
 
-    public void deleteVse(MainRepo mainRepo) { //метод удаления всего (убрать потом)
+    public void deleteVse() { //метод удаления всего (убрать потом)
         mainRepo.deleteAll();
     }
 
