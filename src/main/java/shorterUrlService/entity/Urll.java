@@ -18,10 +18,6 @@ public class Urll {
         this.shortUrl = shortUrl;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getLongUrl() {
         return longUrl;
     }

@@ -6,7 +6,7 @@ function tap() {
 
     url = urlForm.value;
 
-    fetch('/data', {
+    fetch('/generate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

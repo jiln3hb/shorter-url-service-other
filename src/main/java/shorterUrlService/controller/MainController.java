@@ -1,23 +1,23 @@
 package shorterUrlService.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import shorterUrlService.repository.MainRepo;
-import shorterUrlService.service.DBService;
 import shorterUrlService.service.RedirectUrlServiceImpl;
 import shorterUrlService.service.ShortUrlService;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 @Controller
 public class MainController {
+    private final Logger logger = LoggerFactory.getLogger(MainController.class);
     private final ShortUrlService shortUrlService;
     private final RedirectUrlServiceImpl redirectUrlServiceImpl;
 
@@ -27,24 +27,33 @@ public class MainController {
         this.redirectUrlServiceImpl = redirectUrlServiceImpl;
     }
 
-    //TODO маппинги переделать
-    @PostMapping("data")
-    String generateURL (@RequestBody HashMap<String, String> url) {
-        return shortUrlService.genAndCheck(url);
+    @PostMapping("/generate")
+    @ResponseBody
+    String generateURL(@RequestBody HashMap<String, String> url) {
+        String longUrl, reducedUrl;
+
+        longUrl = url.get("url");
+        reducedUrl = shortUrlService.genAndCheck(url);
+
+        logger.info("reduced URL {} was successfully generated for {}", reducedUrl, longUrl);
+
+        return reducedUrl;
     }
+
+    @GetMapping("/") //TODO все ещё вызываются оба метода надо фиксить
+    String def() {
+        return "index";
+    }
+
 
     @GetMapping("/{shortUrl}")
-    ResponseEntity<?> redirect (@PathVariable String shortUrl) {
+    ResponseEntity<?> redirect(@PathVariable String shortUrl) {
+        URI longUrl = redirectUrlServiceImpl.genURI(shortUrl);
+
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(redirectUrlServiceImpl.genURI(shortUrl));
+        httpHeaders.setLocation(longUrl);
 
+        logger.info("successfully redirected from {} to {}", shortUrl, longUrl);
         return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
-    }
-
-    @GetMapping("/")
-    ModelAndView def() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        return modelAndView;
     }
 }

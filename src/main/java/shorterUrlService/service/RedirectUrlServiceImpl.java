@@ -1,10 +1,6 @@
 package shorterUrlService.service;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import shorterUrlService.repository.MainRepo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,11 +12,10 @@ public class RedirectUrlServiceImpl implements RedirectUrlService {
     public RedirectUrlServiceImpl(DBService dbService) {
         this.dbService = dbService;
     }
-    @Override
-    public URI genURI (String shortUrl) { //метод перенаправляющий с короткой ссылки на длинную
-        //сделал так, чтобы метод возвращал чисто uri а весь остальной функционал в слое контроллера
+    @Override //TODO не совсем понятно зачем остальной функционал метода нужно было переносить в слой контроллера
+    public URI genURI (String shortUrl) { //метод, создающий URI
         try {
-            return new URI("http://" + dbService.findByshortUrl(shortUrl).getLongUrl()); //TODO написать тест (JUnit 5, Mockito, assertJ)
+            return new URI("http://" + dbService.findByshortUrl(shortUrl).getLongUrl());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
