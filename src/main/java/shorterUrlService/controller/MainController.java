@@ -1,50 +1,44 @@
 package shorterUrlService.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import shorterUrlService.entity.Urll;
 import shorterUrlService.repository.MainRepo;
 import shorterUrlService.service.DBService;
-import shorterUrlService.service.RedirectUrlService;
+import shorterUrlService.service.RedirectUrlServiceImpl;
 import shorterUrlService.service.ShortUrlService;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 
-@RestController
+@Controller
 public class MainController {
-
-    private final ShortUrlService shortUrlService; //TODO переписать
-    private final RedirectUrlService redirectUrlService;
-    private final DBService dbService;
+    private final ShortUrlService shortUrlService;
+    private final RedirectUrlServiceImpl redirectUrlServiceImpl;
 
     @Autowired
-    public MainController(MainRepo mainRepo) {
-        this.mainRepo = mainRepo;
+    public MainController(MainRepo mainRepo, ShortUrlService shortUrlService, RedirectUrlServiceImpl redirectUrlServiceImpl) {
+        this.shortUrlService = shortUrlService;
+        this.redirectUrlServiceImpl = redirectUrlServiceImpl;
     }
 
-    @GetMapping("list")
-    List<Urll> list() {
-        return dbService.listAll(mainRepo);
-    }
-
-    @DeleteMapping("deleteAll")
-    void delete () {
-        dbService.deleteVse(mainRepo);
-    }
-
+    //TODO маппинги переделать
     @PostMapping("data")
-    String generateURL (@RequestBody HashMap url) {
-        return shortUrlService.generate(url, mainRepo);
+    String generateURL (@RequestBody HashMap<String, String> url) {
+        return shortUrlService.genAndCheck(url);
     }
 
     @GetMapping("/{shortUrl}")
     ResponseEntity<?> redirect (@PathVariable String shortUrl) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(redirectUrlServiceImpl.genURI(shortUrl));
 
-        if (shortUrl != null) def();
-        return redirectUrlService.redirectTo(shortUrl, mainRepo);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/")
@@ -52,5 +46,5 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;
-    } //TODO костыль??
+    }
 }

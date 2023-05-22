@@ -3,5 +3,5 @@ package shorterUrlService.service;
 import java.util.HashMap;
 
 public interface ShortUrlService {
-    String generate (HashMap url);
+    String genAndCheck (HashMap<String, String> url);
 }

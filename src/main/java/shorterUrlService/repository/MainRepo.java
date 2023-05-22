@@ -6,9 +6,6 @@ import shorterUrlService.entity.Urll;
 
 @Repository
 public interface MainRepo extends JpaRepository<Urll, Long> {
-
     Urll findByshortUrl (String shortUrl);
-
     Urll findBylongUrl (String longUrl);
-
 }
