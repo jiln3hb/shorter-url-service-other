@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import shorterUrlService.entity.Urll;
-import shorterUrlService.repository.MainRepo;
+import shorterUrlService.entity.UrlEntity;
+import shorterUrlService.repository.UrlRepo;
 import shorterUrlService.service.DBService;
 
 import java.util.List;
@@ -19,13 +19,13 @@ public class DBController {
     private final DBService dbService;
 
     @Autowired
-    public DBController(MainRepo mainRepo, DBService dbService) {
+    public DBController(UrlRepo urlRepo, DBService dbService) {
         this.dbService = dbService;
     }
 
     @GetMapping("/listAll")
     @ResponseBody
-    List<Urll> listAll() {
+    List<UrlEntity> listAll() {
         logger.info("listAll request was executed");
         return dbService.listAll();
     }

@@ -3,17 +3,17 @@ package shorterUrlService.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table
-public class Urll {
+@Table(name = "url")
+public class UrlEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String longUrl;
     private String shortUrl;
 
-    public Urll() {}
+    public UrlEntity() {}
 
-    public Urll(String longUrl, String shortUrl) {
+    public UrlEntity(String longUrl, String shortUrl) {
         this.longUrl = longUrl;
         this.shortUrl = shortUrl;
     }

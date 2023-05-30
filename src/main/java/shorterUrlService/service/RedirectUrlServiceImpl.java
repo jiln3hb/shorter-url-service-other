@@ -12,12 +12,12 @@ public class RedirectUrlServiceImpl implements RedirectUrlService {
     public RedirectUrlServiceImpl(DBService dbService) {
         this.dbService = dbService;
     }
-    @Override //TODO не совсем понятно зачем остальной функционал метода нужно было переносить в слой контроллера
+    @Override
     public URI genURI (String shortUrl) { //метод, создающий URI
         try {
-            return new URI("http://" + dbService.findByshortUrl(shortUrl).getLongUrl());
+            return new URI("http://" + dbService.findByshortUrl(shortUrl).getLongUrl()); //TODO тут проверять isPresent
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //TODO тут кидать exception
         }
     }
 }

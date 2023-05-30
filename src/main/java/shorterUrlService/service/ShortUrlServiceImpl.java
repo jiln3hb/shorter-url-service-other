@@ -3,25 +3,29 @@ package shorterUrlService.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import shorterUrlService.controller.MainController;
-import shorterUrlService.entity.Urll;
+import shorterUrlService.entity.UrlEntity;
 import shorterUrlService.exceptions.BadRequestException;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
+    //TODO regex поправить (добавить необязательную группу http:\\)
+    //TODO сделать проверку на regex с помощью pattern
     private static final String URL_REGEX = "^[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&//=]*)$";
     private final Logger logger = LoggerFactory.getLogger(ShortUrlServiceImpl.class);
     private final DBService dbService;
+    private final Pattern pattern;
 
     public ShortUrlServiceImpl(DBService dbService) {
+        pattern = Pattern.compile(URL_REGEX);
         this.dbService = dbService;
     }
 
     @Override
-    public String genAndCheck(HashMap<String, String> url) {
+    public String genAndCheck(Map<String, String> url) {
 
         String longUrl = url.get("url");
 
@@ -31,7 +35,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     }
 
     private void check(String longUrl) { //метод, проверяющий ввод на валидность
-        if (longUrl.isBlank() || !longUrl.matches(URL_REGEX)) {
+        if (longUrl == null || longUrl.isBlank() || !longUrl.matches(URL_REGEX)) {
             logger.warn("entered url is not valid");
             throw new BadRequestException("entered url is not valid"); //400
         }
@@ -47,7 +51,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         } while (dbService.findByshortUrl(reducedURL) != null); //если такая короткая ссылка уже есть, генерация повторяется (маловероятно)
 
         //сохранение новой сущности в бд
-        dbService.save(new Urll(longUrl, reducedURL));
+        dbService.save(new UrlEntity(longUrl, reducedURL));
 
         return reducedURL;
     }

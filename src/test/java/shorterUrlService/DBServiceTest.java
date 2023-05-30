@@ -3,19 +3,18 @@ package shorterUrlService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import shorterUrlService.entity.Urll;
-import shorterUrlService.repository.MainRepo;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import shorterUrlService.entity.UrlEntity;
+import shorterUrlService.repository.UrlRepo;
 import shorterUrlService.service.DBService;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
 public class DBServiceTest {
 
     @Mock
-    private MainRepo mainRepo;
+    private UrlRepo urlRepo;
 
     @InjectMocks
     private DBService dbService;
@@ -26,11 +25,11 @@ public class DBServiceTest {
 
     @Test
     public void positiveTestFindByshortUrl() {
-        Urll urll = new Urll("domain.ru", "a3b4c2");
+        UrlEntity urlEntity = new UrlEntity("domain.ru", "a3b4c2");
 
-        dbService.save(urll);
+        dbService.save(urlEntity);
 
-        Assertions.assertEquals(urll, dbService.findByshortUrl("a3b4c2"));
+        Assertions.assertEquals(urlEntity, dbService.findByshortUrl("a3b4c2"));
     }
 
     @Test
