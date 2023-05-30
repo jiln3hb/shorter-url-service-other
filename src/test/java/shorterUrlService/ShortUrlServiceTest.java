@@ -32,13 +32,13 @@ public class ShortUrlServiceTest {
 
     @Test
     public void testGenAndCheckIncorrectParams() {
-        assertThrows(BadRequestException.class, () -> shortUrlService.genAndCheck(Collections.emptyMap()));
-        assertThrows(BadRequestException.class, () -> shortUrlService.genAndCheck(Map.of("url", "")));
+        assertThrows(BadRequestException.class, () -> shortUrlService.genAndCheck(null));
+        assertThrows(BadRequestException.class, () -> shortUrlService.genAndCheck(""));
     }
 
     @Test
     public void testGenAndCheck() {
-        Map<String, String> paramUrl = Map.of("url", "vk.com/profile");
+        String paramUrl = "vk.com/profile";
 
         String url = shortUrlService.genAndCheck(paramUrl);
         assertThat(url).isNotNull().isNotBlank();

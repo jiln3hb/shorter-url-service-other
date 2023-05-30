@@ -14,5 +14,5 @@ function tap() {
         body: JSON.stringify({ 'url': url })
         })
             .then(response => response.text())
-                .then(responseText => out.textContent = 'domain.ru/' + responseText); //TODO доделать норм вывод если bad request
+                .then(responseText => out.textContent = '/' + responseText); //TODO доделать норм вывод если bad request
 }

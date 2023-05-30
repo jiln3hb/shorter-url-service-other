@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import shorterUrlService.repository.UrlRepo;
+import shorterUrlService.service.RedirectUrlService;
 import shorterUrlService.service.RedirectUrlServiceImpl;
 import shorterUrlService.service.ShortUrlService;
 
@@ -19,12 +20,12 @@ import java.util.HashMap;
 public class UrlController {
     private final Logger logger = LoggerFactory.getLogger(UrlController.class);
     private final ShortUrlService shortUrlService;
-    private final RedirectUrlServiceImpl redirectUrlServiceImpl;
+    private final RedirectUrlService redirectUrlService;
 
     @Autowired
-    public UrlController(UrlRepo urlRepo, ShortUrlService shortUrlService, RedirectUrlServiceImpl redirectUrlServiceImpl) {
+    public UrlController(UrlRepo urlRepo, ShortUrlService shortUrlService, RedirectUrlServiceImpl redirectUrlService) {
         this.shortUrlService = shortUrlService;
-        this.redirectUrlServiceImpl = redirectUrlServiceImpl;
+        this.redirectUrlService = redirectUrlService;
     }
 
     @PostMapping("/generate")
@@ -32,15 +33,16 @@ public class UrlController {
     String generateURL(@RequestBody HashMap<String, String> url) {
         String longUrl, reducedUrl;
 
-        longUrl = url.get("url"); //TODO тут доставать строку и передавать в метод уже строчку а не map
-        reducedUrl = shortUrlService.genAndCheck(url);
+        longUrl = url.get("url");
+
+        reducedUrl = shortUrlService.genAndCheck(longUrl);
 
         logger.info("reduced URL {} was successfully generated for {}", reducedUrl, longUrl);
 
         return reducedUrl;
     }
 
-    @GetMapping("/") //TODO favicon.ico пофиксить
+    @GetMapping("/")
     String def() {
         logger.info("get mapping def");
         return "index";
@@ -48,14 +50,8 @@ public class UrlController {
 
 
     @GetMapping("/{shortUrl}")
-    ResponseEntity<?> redirect(@PathVariable String shortUrl) {
+    String redirect(@PathVariable String shortUrl) {
         logger.info("get mapping redirect, shortUrl= {}", shortUrl);
-        URI longUrl = redirectUrlServiceImpl.genURI(shortUrl);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(longUrl);
-
-        logger.info("successfully redirected from {} to {}", shortUrl, longUrl);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        return redirectUrlService.redirect(shortUrl);
     }
 }

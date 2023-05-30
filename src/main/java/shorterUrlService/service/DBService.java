@@ -6,6 +6,7 @@ import shorterUrlService.entity.UrlEntity;
 import shorterUrlService.repository.UrlRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DBService {
@@ -28,11 +29,11 @@ public class DBService {
         urlRepo.save(urlEntity);
     } //метод для сохранения сущности в бд
 
-    public UrlEntity findByshortUrl(String shortUrl) { //TODO протестить
+    public Optional<UrlEntity> findByshortUrl(String shortUrl) { //TODO протестить
         return urlRepo.findByshortUrl(shortUrl);
     } //метод поиска информации о сущности по её shortUrl
 
-    public UrlEntity findBylongUrl(String longUrl) {
+    public Optional<UrlEntity> findBylongUrl(String longUrl) {
         return urlRepo.findBylongUrl(longUrl);
     } //метод поиска информации о сущности по её longUrl
 
