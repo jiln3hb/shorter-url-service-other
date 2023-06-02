@@ -17,24 +17,19 @@ public class DBService {
         this.urlRepo = urlRepo;
     }
 
-    public List<UrlEntity> listAll() { //TODO протестить
+    public List<UrlEntity> listAll() {
         return urlRepo.findAll();
     } //метод возвращает информацию о всех сущностях из бд в виде списка
 
-    public void deleteAll() { //TODO протестить
+    public void deleteAll() {
         urlRepo.deleteAll();
     } //удаляет все данные из бд
 
-    public void save(UrlEntity urlEntity) { //TODO протестить
+    public void save(UrlEntity urlEntity) {
         urlRepo.save(urlEntity);
     } //метод для сохранения сущности в бд
 
-    public Optional<UrlEntity> findByshortUrl(String shortUrl) { //TODO протестить
+    public Optional<UrlEntity> findByshortUrl(String shortUrl) {
         return urlRepo.findByshortUrl(shortUrl);
     } //метод поиска информации о сущности по её shortUrl
-
-    public Optional<UrlEntity> findBylongUrl(String longUrl) {
-        return urlRepo.findBylongUrl(longUrl);
-    } //метод поиска информации о сущности по её longUrl
-
 }

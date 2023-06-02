@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import shorterUrlService.entity.UrlEntity;
 import shorterUrlService.exceptions.BadRequestException;
 
-import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,7 +49,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         do {
             //генерация рандомной последовательности из 5 символов
             Random rnd = new Random();
-            reducedURL = Long.toHexString(rnd.nextLong()).substring(0, 5); //TODO протестить
+            reducedURL = Long.toHexString(rnd.nextLong()).substring(0, 5);
         } while (dbService.findByshortUrl(reducedURL).isPresent()); //если такая короткая ссылка уже есть, генерация повторяется (маловероятно)
 
         //сохранение новой сущности в бд

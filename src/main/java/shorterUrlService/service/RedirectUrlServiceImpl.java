@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import shorterUrlService.entity.UrlEntity;
 import shorterUrlService.exceptions.NotFoundException;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 @Service
