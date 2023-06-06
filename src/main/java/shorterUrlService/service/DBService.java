@@ -18,15 +18,15 @@ public class DBService {
     }
 
     public List<UrlEntity> listAll() {
-        return urlRepo.findAll();
+        return urlRepo.findAllCustom();
     } //метод возвращает информацию о всех сущностях из бд в виде списка
 
     public void deleteAll() {
-        urlRepo.deleteAll();
+        urlRepo.deleteAllCustom();
     } //удаляет все данные из бд
 
     public void save(UrlEntity urlEntity) {
-        urlRepo.save(urlEntity);
+        urlRepo.saveCustom(urlRepo.getNextUrlEntityId(), urlEntity.getLongUrl(), urlEntity.getShortUrl());
     } //метод для сохранения сущности в бд
 
     public Optional<UrlEntity> findByshortUrl(String shortUrl) {

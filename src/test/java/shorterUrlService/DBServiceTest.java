@@ -28,23 +28,24 @@ public class DBServiceTest {
     }
 
     @Test
-    public void testListAll() {
-        UrlEntity entity1 = new UrlEntity("github.com", "a1b2c3");
-        UrlEntity entity2 = new UrlEntity("vk.com", "a2b3c4");
-        UrlEntity entity3 = new UrlEntity("google.com", "a3b4c5");
+    public void testSave() {
+        UrlEntity exceptedEntity = new UrlEntity("github.com", "a1b2c");
+        dbService.save(exceptedEntity);
 
-        List<UrlEntity> entitiesList = List.of(entity1, entity2, entity3);
+        List<UrlEntity> list = urlRepo.findAll();
 
-        urlRepo.saveAll(entitiesList);
+        assertFalse(list.isEmpty());
+        assertEquals(1, list.size());
 
-        assertEquals(dbService.listAll(), entitiesList);
+        assertEquals(exceptedEntity.getLongUrl(), list.get(0).getLongUrl());
+        assertEquals(exceptedEntity.getShortUrl(), list.get(0).getShortUrl());
     }
 
     @Test
-    public void testDeleteAll() {
-        UrlEntity entity1 = new UrlEntity("github.com", "a1b2c3");
-        UrlEntity entity2 = new UrlEntity("vk.com", "a2b3c4");
-        UrlEntity entity3 = new UrlEntity("google.com", "a3b4c5");
+    public void testDeleteAll() { //TODO пришлось добавить конструктор с id
+        UrlEntity entity1 = new UrlEntity(1L,"github.com", "a1b2c");
+        UrlEntity entity2 = new UrlEntity(2L,"vk.com", "a2b3c");
+        UrlEntity entity3 = new UrlEntity(3L,"google.com", "a3b4c");
         List<UrlEntity> entitiesList = List.of(entity1, entity2, entity3);
         urlRepo.saveAll(entitiesList);
 
@@ -54,15 +55,23 @@ public class DBServiceTest {
     }
 
     @Test
-    public void testSave() {
-        UrlEntity exceptedEntity = new UrlEntity("github.com", "a1b2c3");
-        dbService.save(exceptedEntity);
+    public void testListAll() { //TODO пришлось добавить конструктор с id
+        UrlEntity entity1 = new UrlEntity(1L,"github.com", "a1b2c");
+        UrlEntity entity2 = new UrlEntity(2L, "vk.com", "a2b3c");
+        UrlEntity entity3 = new UrlEntity(3L, "google.com", "a3b4c");
 
-        List<UrlEntity> list = urlRepo.findAll();
+        List<UrlEntity> entitiesList = List.of(entity1, entity2, entity3);
 
-        assertFalse(list.isEmpty());
-        assertEquals(1, list.size());
-        assertEquals(exceptedEntity, list.get(0));
+        urlRepo.saveAll(entitiesList);
+
+        assertEquals(dbService.listAll().get(0).getLongUrl(), entitiesList.get(0).getLongUrl());
+        assertEquals(dbService.listAll().get(0).getShortUrl(), entitiesList.get(0).getShortUrl());
+
+        assertEquals(dbService.listAll().get(1).getLongUrl(), entitiesList.get(1).getLongUrl());
+        assertEquals(dbService.listAll().get(1).getShortUrl(), entitiesList.get(1).getShortUrl());
+
+        assertEquals(dbService.listAll().get(2).getLongUrl(), entitiesList.get(2).getLongUrl());
+        assertEquals(dbService.listAll().get(2).getShortUrl(), entitiesList.get(2).getShortUrl());
     }
 
     @Test
@@ -74,14 +83,15 @@ public class DBServiceTest {
 
     @Test
     public void testFindByshortUrl() {
-        UrlEntity exceptedEntity = new UrlEntity("vk.com", "a1b2c3");
-        urlRepo.save(exceptedEntity);
+        UrlEntity exceptedEntity = new UrlEntity("vk.com", "a1b2c");
+        dbService.save(exceptedEntity);
         System.out.println("exceptedEntity: " + exceptedEntity.getLongUrl() + ", " + exceptedEntity.getShortUrl());
 
-        Optional<UrlEntity> actualEntity = dbService.findByshortUrl("a1b2c3");
+        Optional<UrlEntity> actualEntity = dbService.findByshortUrl("a1b2c");
 
         assertTrue(actualEntity.isPresent());
         System.out.println("actualEntity: " + actualEntity.get().getLongUrl() + ", " + actualEntity.get().getShortUrl());
-        assertEquals(exceptedEntity, actualEntity.get());
+        assertEquals(exceptedEntity.getLongUrl(), actualEntity.get().getLongUrl());
+        assertEquals(exceptedEntity.getShortUrl(), actualEntity.get().getShortUrl());
     }
 }

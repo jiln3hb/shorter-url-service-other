@@ -46,17 +46,14 @@ public class ShortUrlServiceTest {
     @Test
     public void testGenAndCheck() {
         String longUrl = "vk.com/profile";
-
         String shortUrl = shortUrlService.genAndCheck(longUrl);
 
         assertThat(shortUrl).isNotNull().isNotBlank();
-        System.out.println("excepted: longUrl: " + longUrl + " shortUrl: " + shortUrl);
 
         Optional<UrlEntity> urlEntity = dbService.findByshortUrl(shortUrl);
 
         assertTrue(urlEntity.isPresent());
         assertEquals(longUrl, urlEntity.get().getLongUrl());
         assertEquals(shortUrl, urlEntity.get().getShortUrl());
-        System.out.println("actual: longUrl: " + urlEntity.get().getLongUrl() + " shortUrl: " + urlEntity.get().getShortUrl());
     }
 }
