@@ -2,17 +2,16 @@
 var urlForm = document.getElementById("urlForm");
 var out = document.getElementById("out");
 
-function tap() {
+async function tap() {
 
     url = urlForm.value;
 
-    fetch('/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 'url': url })
-        })
-            .then(response => response.text())
-                .then(responseText => out.textContent = '/' + responseText); //TODO доделать норм вывод если bad request
+    let response = await fetch('/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ 'url': url })});
+
+    if(response.ok) {
+        let responseText = await response.text();
+        out.textContent = '/' + responseText;
+    } else {
+        out.textContent = 'Url is not valid';
+    }
 }
