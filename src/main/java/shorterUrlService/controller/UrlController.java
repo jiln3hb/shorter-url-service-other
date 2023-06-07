@@ -44,7 +44,6 @@ public class UrlController {
         return "index";
     }
 
-
     @GetMapping("/{shortUrl}")
     String redirect(@PathVariable String shortUrl) {
         logger.info("get mapping redirect, shortUrl= {}", shortUrl);
