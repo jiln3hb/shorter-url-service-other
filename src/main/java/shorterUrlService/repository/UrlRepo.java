@@ -15,11 +15,11 @@ import java.util.Optional;
 @Repository
 public interface UrlRepo extends JpaRepository<UrlEntity, Long> {
 
-    @Query(value = "SELECT nextval('url_seq')", nativeQuery = true)
+    @Query(value = "SELECT nextval('url_seq')", nativeQuery = true) //TODO  сделать serial
     Long getNextUrlEntityId();
 
     @Modifying
-    @Transactional
+    @Transactional //TODO переместить в слой сервиса
     @Query(value = "INSERT INTO url (id, long_Url, short_Url) VALUES (:id, :longUrl, :shortUrl)", nativeQuery = true)
     void saveCustom(@Param("id") long id, @Param("longUrl") String longUrl, @Param("shortUrl") String shortUrl);
 
@@ -28,7 +28,7 @@ public interface UrlRepo extends JpaRepository<UrlEntity, Long> {
     @Query(value = "DELETE FROM url", nativeQuery = true)
     void deleteAllCustom();
 
-    @Query(value = "SELECT * FROM url", nativeQuery = true)
+    @Query(value = "SELECT * FROM url", nativeQuery = true) //TODO звёздочки убрать
     List<UrlEntity> findAllCustom();
 
     @Query(value = "SELECT * FROM url WHERE url.short_Url = :shortUrl", nativeQuery = true)
